@@ -15,7 +15,6 @@ class DigitalClock(QLCDNumber):
         timer.start(1000)
 
         self.showTime()
-        self.checkHourChange()
 
         self.setWindowTitle("Clockshima")
         self.resize(280, 60)
@@ -26,25 +25,13 @@ class DigitalClock(QLCDNumber):
         text = time.toString('hh:mm:ss')
         self.display(text)
 
-        if time.second() == 40:
-            # play the appropriate file based on the time
-            # wave_obj = sa.WaveObject.from_wave_file(time.hour() + '.wav')
-            wave_obj = sa.WaveObject.from_wave_file('awake.wav')
-            wave_obj.play()
+        if time.minute() == 0:
             # show the subtitle for the respective message
             print(alarmLines[time.hour()])
-
-    def checkHourChange(self):
-        time = QTime.currentTime()
-        if time.second() == 10:
-            print('an hour has passed')
             # play the appropriate file based on the time
             # wave_obj = sa.WaveObject.from_wave_file(time.hour() + '.wav')
-            wave_obj = sa.WaveObject.from_wave_file('awake.wav')
-            play_obj = wave_obj.play()
-            play_obj.wait_done()
-            # show the subtitle for the respective message
-            # print(alarmLines[time.hour()])
+            wave_obj = sa.WaveObject.from_wave_file(str(time.hour()) + '.wav')
+            wave_obj.play()
 
 
 def populateList(file):
@@ -60,7 +47,7 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
 
-    alarmLines = populateList('test.txt')
+    alarmLines = populateList('script.txt')
     clock = DigitalClock()
     clock.setStyleSheet("background-color:lightgray;");
     clock.show()
